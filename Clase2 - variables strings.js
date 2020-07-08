@@ -1,0 +1,14 @@
+var nombre = 'Victor',
+    apellido = 'Peña',
+    nombreenmayusculas = nombre.toLocaleUpperCase(),
+    apellidoenminusculas = apellido.toLocaleLowerCase(),
+    primeraLetraDelNombre = nombre.charAt(0),
+    // primeraLetraDelNombre = nombre.charAt(0), todo strig inicia en posicion 0 
+    cantidadDeLetrasDelNombre = nombre.length,
+    nombreCompleto = nombre + ' ' + apellido,
+    nombreCompletoNueva = `${nombre} ${apellido.toLocaleUpperCase()}`,
+    // nombreCompletoNueva = `${nombre} ${apellido.toLocaleUpperCase()}`, nueva y mejor manera ya que podemos meter funciones
+    str = nombre.charAt(1) + apellido.charAt(1),
+    str2 = nombre.substr(1, 3),
+    // str2 = nombre.substr(1, 3) el 1 es donde iniciara y el 3 hats la posicion que llegará
+    ultimaLetraDelNombre = nombre.charAt(5)

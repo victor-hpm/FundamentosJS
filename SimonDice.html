@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+<!-- ////////////////////////// -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Simon Dice</title>
+
+    <!-- /////////////// -->
+
+    <style>
+        body {
+            margin: 0;
+            background: #dedede;
+            display: flex;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .gameboard {
+            height: 100vh;
+            width: 100vh;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto;
+            max-height: 60vh;
+            max-width: 60vh;
+        }
+        
+        .color {
+            width: 50%;
+            height: 50%;
+            display: inline-block;
+        }
+        
+        .left {
+            float: left;
+        }
+        
+        .right {
+            float: left;
+        }
+        
+        .celeste {
+            background: #22a6b3;
+        }
+        
+        .celeste.light {
+            background: #7ed6df;
+        }
+        
+        .violeta {
+            background: #be2edd;
+        }
+        
+        .violeta.light {
+            background: #e056fd;
+        }
+        
+        .naranja {
+            background: #f0932b;
+        }
+        
+        .naranja.light {
+            background: #ffbe76;
+        }
+        
+        .verde {
+            background: #6ab04c;
+        }
+        
+        .verde.light {
+            background: #badc58;
+        }
+        
+        .btn-start {
+            width: 400px;
+            height: 100px;
+            background: #ecf0f1;
+            color: #2c3e50;
+            font-size: 2.5rem;
+            position: absolute;
+            top: calc(50% - 50px);
+            left: calc(50% - 200px);
+        }
+        
+        .hide {
+            display: none;
+        }
+        
+        * {
+            font-family: 'Arial';
+        }
+    </style>
+
+    <!-- //////// -->
+
+</head>
+
+<!-- ////////////////////// -->
+
+<body>
+    <div class="gameboard">
+        <div id="celeste" class="color celeste left" data-color="celeste"></div>
+        <div id="violeta" class="color violeta right" data-color="violeta"></div>
+        <div id="naranja" class="color naranja left" data-color="naranja"></div>
+        <div id="verde" class="color verde right" data-color="verde"></div>
+        <button id="btnEmpezar" class="btn-start" onclick="empezarJuego()">Empezar a jugar!</button>
+    </div>
+
+    <!-- ////////////////// -->
+    <!-- script para poder utiluzar sweet alert -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
+    <script>
+        // obtencion de botones o divs del html hacia el script
+
+        const btnEmpezar = document.getElementById('btnEmpezar') //recibira un string con el id del documento que queremos construir (id btnEmpezar), ahora ya lo tenemos disponeble en cualquier lugar del programa en js
+
+        // ahora obtendremos los demas botones de los divs
+        const celeste = document.getElementById('celeste')
+        const violeta = document.getElementById('violeta')
+        const naranja = document.getElementById('naranja')
+        const verde = document.getElementById('verde')
+            // ahora ya que tenemos los botones disponibles btnEmpezar lo podemos ocultar en inicializar///////
+
+        const ULTIMO_NIVEL = 10 //total de niveles
+
+        class Juego {
+            constructor() { //no recibira ningun parametro pero podemos empezar a  inicializarlo 
+                this.inicializar() // llamaremos a la funcion inicializar en el constructor
+                this.generarSecuencia() //llamamos a la funcion generarSecuencia en el constructor
+                setTimeout(this.siguienteNivel, 1000) // llamamos pase al sigiente nivel, 1 segundo despues de this.generarSecuencia
+                this.inicializar = this.inicializar.bind(this) //para atar inicializar a this
+            }
+
+            inicializar() { // la definimos, lo primero que hara es ocultar el boton de empezar pero tenemos que tener el boton disponible del html hacia el script 
+                // btnEmpezar.classList.add('hide') //////ocultar boton en inizializar, a las clases de css que tiene le agregamos una que va a ser hide que en css le agrega un display none al elemnto(esto se reemplazara con this.toggleBtnEmpezar()//)
+                this.nivel = 1 // indicamos que es el nivel 1
+                this.colores = { // guardar los colores en this colores
+                        //celeste: celeste  asignar atrituto y valor iguales se puede omitir los dos puntos y solo poner la palabra celeste,
+                        celeste,
+                        violeta,
+                        naranja,
+                        verde
+                    }
+                    // +++++ 3 asi siempre quedara atado que el this es el del juego
+                this.elegirColor = this.elegirColor.bind(this)
+                this.siguienteNivel = this.siguienteNivel.bind(this)
+                this.toggleBtnEmpezar() //toggle es como un swhich de prendido apagado
+            }
+
+            toggleBtnEmpezar() {
+                if (btnEmpezar.classList.contains('hide')) { // se fija si el boton contiene la clase hide 
+                    btnEmpezar.classList.remove('hide') // si ya tiene clase hide la remueve 
+                } else {
+                    btnEmpezar.classList.add('hide') // y si no la tiene se la vamos a poner
+                }
+            }
+
+            generarSecuencia() { //
+                this.secuencia = new Array(ULTIMO_NIVEL).fill(0).map(n => Math.floor(Math.random() * 4))
+                    //generar la secuencia de numeros random, 
+                    //podemos poner un atribito nuevo (this.secuencia) aunque no exista y se guardara internamente en el objeto del juego, 
+                    //fill(0) todos los elementos en 0, fill es necesario porque todos los elementos deben estar definidos y tener algun valor auque sea 0 porque llamaremos a la funcion map, para tener 10 ceros, 
+                    // map(n => Math.floor(Math.random() * 4)) 
+                    //n es un 0
+                    //Math.random() es un valor entre 0 y 1 que cambiara siempre, (Math.random() * 4) obtendremos un valor entre 0 y 4 pero nuenca sera 4
+                    //Math.floor redondea para abajo si es 3.9 sera 3
+            }
+
+            siguienteNivel() {
+                this.iluminarSecuencia() //va a llamar a al metodo iluminarSecuencia
+                this.agregarEventosClick() // llama al metodo que agrega los eventos de click a los botones
+                this.subnivel = 0
+                    // para agregar a tributos, no hace falta tenerlo en el constructor a partir de ahora 
+                    // lo tendremos disponeble
+                    // this.nombreAtributo = 'valor'
+            }
+
+            transformarNumeroAColor(numero) { // transformara el numero dado por el array a un numero(recibira un numero)
+                    switch (numero) {
+                        case 0:
+                            return 'celeste'
+                                // break nuenca se ejectutare por el return de arriba
+                        case 1:
+                            return 'violeta'
+                        case 2:
+                            return 'naranja'
+                        case 3:
+                            return 'verde'
+                    }
+                } //ahora lo agarramos y lo colocamos en el ciclo for
+
+            transformarColorANumero(color) {
+                    switch (color) {
+                        case 'celeste':
+                            return 0
+                        case 'violeta':
+                            return 1
+                        case 'naranja':
+                            return 2
+                        case 'verde':
+                            return 3
+                    }
+                } // este es para elegir color 
+
+
+            iluminarSecuencia() { //el nivel 1 ira aumentando conforme pase de nivel, recorre el array de la secuencia
+                for (let i = 0; i < this.nivel; i++) { // ciclo for var i = 0; i<this.nivel;(ira hasta el nivel en que se encuentre el usuario; aumentanto i++)
+                    const color = this.transformarNumeroAColor(this.secuencia[i])
+                        // this.iluminarColor(color); debemos llamarla el el tiempo porque si no se ejecutaran todos los colores en el mismo tiempo, para que se llame en el futuro para cada color le agregamos el i, el delay sera de un segundo = 1000 * i y asi el pimer color se jecutora en un regundo el degundo en dos segundos, el tercero en tres segundos
+                    setTimeout(() => this.iluminarColor(color), 1000 * i)
+                        // dentro de los ciclos for tendremos que pocupar let y no var para evitar bugs 
+                        // siempre mejor const antes de let y let antes de var
+                }
+            }
+
+            iluminarColor(color) {
+                this.colores[color].classList.add('light') //classlist es una clase de css y adiere una clase light
+                setTimeout(() => this.apagarColor(color), 350) //llamamos a una funcion en el tiempo que es settimeout y llamara a apagar color , tiempo en milisegundos
+            }
+
+            apagarColor(color) { //recibe el color
+                this.colores[color].classList.remove('light') //remueve la clase light
+            }
+
+            agregarEventosClick() {
+                // // ++++ 2 bind(this) ata al this del juego
+                // this.colores.celeste.addEventListener('click', this.elegirColor.bind(this))
+                // tambien se puede hacer asi pero lo pondremos en inicializar
+                // var self = this
+                // this.colores.celeste.addEventListener('click', this.elegirColor.bind(self))
+
+                this.colores.celeste.addEventListener('click', this.elegirColor)
+                this.colores.verde.addEventListener('click', this.elegirColor)
+                this.colores.violeta.addEventListener('click', this.elegirColor)
+                this.colores.naranja.addEventListener('click', this.elegirColor)
+                    // a cada uno de los colores se le agrega el evento click y decirle al navegador que 
+                    // funcion tiene que ejecutar cuando se realice ese evento click, esto sera asincronamente 
+            }
+
+            eliminarEventosClick() {
+                this.colores.celeste.removeEventListener('click', this.elegirColor)
+                this.colores.verde.removeEventListener('click', this.elegirColor)
+                this.colores.violeta.removeEventListener('click', this.elegirColor)
+                this.colores.naranja.removeEventListener('click', this.elegirColor)
+
+            }
+
+            ganoElJuego() {
+                swal('Muy Bien!!', 'Felicidadez Ganaste el Juego =)', 'success') //de esta manera se agregan mensajes desde sweetAlert previamente poneiendo el link de cdn
+                    // .then(() => { //.then para que que despues de que de aceptar en el mensje haga lo que le pones 
+                    // this.inicializar() // se puede poner en euna sola nimne de la sig manera
+                    // })
+                    .then(this.inicializar)
+            }
+
+
+            perdioElJuego() {
+                swal('Que Mal!!', 'Lamentablemente perdiste el Juego =(', 'error')
+                    .then(() => { //.then para que que despues de que de aceptar en el mensje haga lo que le pones 
+                        this.eliminarEventosClick()
+                        this.inicializar()
+                    })
+            }
+
+
+            elegirColor(ev) { //ev de evento, el navedagor le dira js que la llame cuando sucesada ese evento
+                //console.log(this) //ev identifica cada click como un MouseEvent, this identifica al boton que se selecciono  como this
+                // ++++ 1 js pierde en contexto encuanto a quien es el this, ya que lo identifica com el boton y no al juego 
+                // lo que se tiene que hacer es aclarlo en la parte de arriba
+                const nombreColor = ev.target.dataset.color // despues debemos de transformar el nombre al nuemero 
+                    // y tenemos que hacer un switch de color a numero (inverso)
+                const numeroColor = this.transformarColorANumero(nombreColor)
+                    // ahora tenemos que iluminarlo
+                this.iluminarColor(nombreColor)
+                    // // ahora debemos tener una especie de subnivel y que empiece en 0, cada ves que pasamos de nivel
+                    // y que cada vez que pasamos de nivel hara que el subnivel empiece en cero e incrementtara el subnivel 
+                    // cada ves que la secuencia sea correcta
+                    // se agregara en siguienteNivel() 
+
+                // ahora compararemos el numero del color con la secuencia pero en la posicion del subnivel en la que se encuentra
+                if (numeroColor === this.secuencia[this.subnivel]) { // si el numero del color es igual a la secuencia en la pocicion del subivel en la que se encuentra
+                    this.subnivel++ // si elige bien incrementamos el subnivel
+                        if (this.subnivel === this.nivel) { // comparamos , si el subnivel llega a el nismo numero que el nivel 
+                            this.nivel++ // entonces pasa de nivel
+                                this.eliminarEventosClick() //ahora debemos eliminar los eventos de click si pasa de nivel
+                                // si pasa de nivel pueden pasar dos cosas gano el juego o paso al nivel 1 paso al nivel 2 guardamos hasta arriba una constante nuestro ultimo nivel  
+                            if (this.nivel === (ULTIMO_NIVEL + 1)) {
+                                this.ganoElJuego() // gano
+                            } else { // si no es el ultimo nivel entonces pasamos de nivel
+                                setTimeout(this.siguienteNivel, 2000) // haciendo la referencia de que llame a la funcion siguinete nivel y lo hara despues de 2 segundos
+                            }
+                        }
+                } else { //   if (numeroColor === this.secuencia[this.subnivel]) (si no es correcto el color que tenia que tocar)
+                    this.perdioElJuego() // perdio
+                }
+
+            }
+
+        }
+
+
+
+        function empezarJuego() {
+            // alert('EL juego va a comenzar') // manda una alerta en la pantalla
+            // var juego = new Juego() // inicia el juego, empieza el juego y para que funcione tenemos que crear la clase juego, que estara en la parte de arriva y sera la que tendra toda la logica de juego
+            window.juego = new Juego() // pone la variable dentro de window y poder ver en la consola lo que esta pasando 
+        }
+    </script>
+
+    <!-- //////////// -->
+
+</body>
+
+<!-- ///////////////////// -->
+
+</html>
