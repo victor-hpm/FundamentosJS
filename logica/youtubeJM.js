@@ -166,6 +166,171 @@ const eliminarCaracteres = (texto = '', patron = '') => {
 // eliminarCaracteres('xyz0, xyz1, xyz2, xyz3, xyz4, xyz5');
 // eliminarCaracteres('xyz0, xyz1, xyz2, xyz3, xyz4, xyz5', 'xyz');
 
-// 9) Programa una función que obtenga un numero aleatorio entre 501 y 600.
+// 9) Programa una función que obtenga un numero aleatorio entre 501 y 600. (!IsNaN('texto'))
+const numAleatorio = () => console.info(Math.ceil((Math.random() * 100) + 500));
+
+// numAleatorio();
 // 10) Programa una función que reciba un número y evalúe si es capicúa o no (que se lee igual en un sentido que en otro), pe. miFuncion(2002) devolverá true.
+const numCapicua = (num = 0) => {
+    if (!num) return console.warn('no ingresaste un número');
+    if (typeof num !== 'number') return console.error(`El valor ${num} ingresado no es un número`);
+
+    num = num.toString();
+    let alReves = num.split('').reverse().join('');
+
+    return (num === alReves) ?
+        console.info(`El numero ${num} sí es capícua porque ${num} = ${alReves}`) :
+        console.info(`El numero ${num} no es capícua porque ${num} != ${alReves}`);
+}
+
+// numCapicua();
+// numCapicua('12');
+// numCapicua(10);
+// numCapicua(111);
+
 // 11) Programa una función que calcule el factorial de un número (El factorial de un entero positivo n, se define como el producto de todos los números enteros positivos desde 1 hasta n), pe. miFuncion(5) devolverá 120.
+const factorial = (num = undefined) => {
+    if (num === undefined) return console.warn('no ingresaste un número');
+    if (typeof num !== 'number') return console.error(`El valor ${num} ingresado no es un número`);
+    if (num === 0) return console.error('No existe el factorial de 0');
+    if (Math.sign(num) === -1) return console.error('No existe el factorial un número negativo');
+
+    let factorial = 1;
+
+    for (let i = num; i > 1; i--) {
+        // factorial = factorial * i
+        factorial *= i
+    }
+    return console.log(`El factorial de ${num} es ${factorial}`);
+}
+
+// factorial();
+// factorial('5');
+// factorial(5);
+
+// 12) Programa una función que determine si un número es primo (aquel que solo es divisible por sí mismo y 1) o no, pe. miFuncion(7) devolverá true.
+const numPrimo = (num = undefined) => {
+    if (num === undefined) return console.warn('no ingresaste un número');
+    if (typeof num !== 'number') return console.error(`El valor ${num} ingresado no es un número`);
+    if (num === 0) return console.error('No existe número primo de 0');
+    if (num === 1) return console.error('No existe número primo de 1');
+    if (Math.sign(num) === -1) return console.error('No existe un número pirmo negativo');
+
+    let divisible = false;
+
+    for (let i = 2; i < num; i++) {
+        if (num % i === 0) {
+            divisible = true;
+            break;
+        }
+    }
+    return (divisible) ? // es verdadero
+        console.info(`El número ${num} no es primo`) :
+        // si se mantuvo en false osea que no es divisible enntre nungun numero
+        console.info(`El número ${num} si es primo`);
+}
+
+// numPrimo();
+// numPrimo('5');
+// numPrimo(0);
+// numPrimo(1);
+// numPrimo(-1);
+// numPrimo(6);
+// numPrimo(5);
+
+// 12) Programa una función que determine numeros primos del 1 al 100 (aquel que solo es divisible por sí mismo y 1) o no, pe. miFuncion(7) devolverá true.
+let primes = [];
+let noPrimes = [];
+const numMaxPrimo = (num = undefined) => {
+    if (num === undefined) return console.warn('no ingresaste un número');
+    if (typeof num !== 'number') return console.error(`El valor ${num} ingresado no es un número`);
+    if (num === 0) return console.error('No existe número primo de 0');
+    if (num === 1) return console.error('No existe número primo de 1');
+    if (Math.sign(num) === -1) return console.error('No existe un número pirmo negativo');
+
+
+    for (let i = 2; i <= num; i++) {
+        if (isPrime(i)) {
+            primes.push(i);
+        } else {
+            noPrimes.push(i);
+        }
+    }
+}
+
+const isPrime = (n) => {
+    for (let i = 2; i < n; i++) {
+        if (n % i === 0) {
+            return false;
+        }
+        return true;
+    }
+}
+
+
+// numMaxPrimo();
+// numMaxPrimo('100');
+// numMaxPrimo(0);
+// numMaxPrimo(1);
+// numMaxPrimo(-1);
+// numMaxPrimo(true);
+// numMaxPrimo(10000000);
+// console.log('primes', primes);
+// console.log('noPrimes', noPrimes);
+
+
+// 13) Programa una función que determine si un número es par o impar, pe. miFuncion(29) devolverá Impar.
+const parInpar = (num = undefined) => {
+    if (num === undefined) return console.warn('no ingresaste un número');
+    if (typeof num !== 'number') return console.error(`El valor ${num} ingresado no es un número`);
+    if (num === 0) return console.error('No existe número par o inpar de 0');
+
+    return (num % 2 === 0) ?
+        // caso verdadero
+        console.info(`El número ${num} es par`) :
+        // caso falso
+        console.info(`El número ${num} es inpar`);
+}
+
+// parInpar();
+// parInpar('3');
+// parInpar(0);
+// parInpar(5);
+// 14) Programa una función para convertir grados Celsius a Fahrenheit y viceversa, pe. miFuncion(0,"C") devolverá 32°F.
+const celToFahr = (grados = undefined, unidad = undefined) => {
+    if (grados === undefined) return console.warn('no ingresaste grados a convertir');
+    if (typeof grados !== 'number') return console.error(`El valor ${grados} ingresado no es un grado de temperatura`);
+
+    if (unidad === undefined) return console.warn('no ingresaste el tipo de grados a convertir');
+    if (typeof unidad !== 'string') return console.error(`El valor ${unidad} ingresado no es una cadena de texto`);
+    if (unidad.length !== 1 || !/(C|F)/.test(unidad)) return console.warn('valor de unidad no reconocido');
+
+    if (unidad === 'C') {
+        return console.info(`${grados}ºC = ${Math.round((grados*(9/5))+32)}ºF`);
+    } else if (unidad === 'F') {
+        return console.info(`${grados}ºF = ${Math.round(((grados-32)*(5/9)))}ºC`);
+    } else {
+        return console.error('El tipo de grados a convertir no es valido');
+    }
+
+
+
+
+}
+
+// celToFahr()
+// celToFahr('2')
+// celToFahr(2)
+// celToFahr(2, true)
+// celToFahr(2, 'hola')
+// celToFahr(2, 'E')
+// celToFahr(0, 'C');
+// celToFahr(32, 'F')
+
+
+
+
+
+// 15) Programa una función para convertir números de base binaria a decimal y viceversa, pe. miFuncion(100,2) devolverá 4 base 10.
+// 16) Programa una función que devuelva el monto final después de aplicar un descuento a una cantidad dada, pe. miFuncion(1000, 20) devolverá 800.
+// 17) Programa una función que dada una fecha válida determine cuantos años han pasado hasta el día de hoy, pe. miFuncion(new Date(1984,4,23)) devolverá 35 años (en 2020).
