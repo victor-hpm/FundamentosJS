@@ -312,10 +312,6 @@ const celToFahr = (grados = undefined, unidad = undefined) => {
     } else {
         return console.error('El tipo de grados a convertir no es valido');
     }
-
-
-
-
 }
 
 // celToFahr()
@@ -328,9 +324,98 @@ const celToFahr = (grados = undefined, unidad = undefined) => {
 // celToFahr(32, 'F')
 
 
-
-
-
 // 15) Programa una función para convertir números de base binaria a decimal y viceversa, pe. miFuncion(100,2) devolverá 4 base 10.
+
+var a1 = 3;
+
+function foo1() {
+    var a1 = 2;
+    console.log('a1', a1);
+}
+
+function pro1() {
+    foo1();
+}
+
+foo1();
+
+
+
+// function foo2() {
+//     console.log('a2', a2);
+// }
+
+// function bar2() {
+//     var a2 = 3;
+//     // console.log('a2', a2);
+//     foo2();
+// }
+
+// var a2 = 2;
+
+// bar2();
+
+// var cadena = ['perro', 'gato', 'caballo', 'vaca'];
+
+// cadena.filter((valor) => {
+//     return valor.length < 5;
+// });
+
+// console.log(cadena);
+
+
+// const words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present'];
+
+// const result = words.filter(word => word.length > 6);
+
+// console.log(result);
+// expected output: Array ["exuberant", "destruction", "present"]
+
+
+// function f(foo) {
+//     return foo && foo * 3 || null;
+// }
+
+// f(foo);
+
+// x = "4" + 4 + 5
+// y = 4 + 4 + "5"
+
+// console.log(x + '' + y)
+// console.log(x + ' ' + y)
+
+
+
+// let v;
+// let t = v === null;
+
+// console.log(t)
+
+
+// let counter = 1;
+// let z = counter++; // (*) cambiado ++counter a counter++
+
+// console.log(z); // 1
+// console.log(counter); // 2
+
+
+// let counter1 = 0;
+// console.log(counter1++); // 
+
+
+// let c;
+// let s = [];
+// console.log(Boolean(c) == Boolean(s));
+
+// let letras = ['lambda', 'alfa', 'gamma', 'beta'];
+// console.log(letras)
+// letras.sort();
+// letras.shift();
+// console.log(letras)
+
+
+
+
+
 // 16) Programa una función que devuelva el monto final después de aplicar un descuento a una cantidad dada, pe. miFuncion(1000, 20) devolverá 800.
 // 17) Programa una función que dada una fecha válida determine cuantos años han pasado hasta el día de hoy, pe. miFuncion(new Date(1984,4,23)) devolverá 35 años (en 2020).
