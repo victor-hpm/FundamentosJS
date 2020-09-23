@@ -326,18 +326,44 @@ const celToFahr = (grados = undefined, unidad = undefined) => {
 
 // 15) Programa una función para convertir números de base binaria a decimal y viceversa, pe. miFuncion(100,2) devolverá 4 base 10.
 
-var a1 = 3;
+const binToDec = (number = undefined, base = undefined) => {
+    if (number === undefined) return console.warn('No ingresaste el número a convertir');
+    if (typeof number !== 'number') return console.warn(`El dato ${number} ingresado como número, debe ser de tipo number`);
+    if (base === undefined) return console.warn('No ingresaste una base a convertir');
+    if (typeof base !== 'number') return console.warn(`El dato ${base} ingersado como base, debe ser de tipo number`);
 
-function foo1() {
-    var a1 = 2;
-    console.log('a1', a1);
+    if (base === 2) {
+        return console.info(`El número ${number} en base ${base} = ${parseInt(number,base)} en base 10`);
+    } else if (base === 10) {
+        return console.info(`El número ${number} en base ${base} = ${number.toString(base)} en base 2`);
+    } else {
+        return console.error('El tipo de base a convertir no es valido');
+    }
 }
 
-function pro1() {
-    foo1();
-}
+// binToDec();
+// binToDec('2', 2);
+// binToDec(100);
+// binToDec(100, '2');
+// binToDec(100, 2);
+// binToDec(4, 10);
 
-foo1();
+
+
+
+// var a1 = 3;
+
+// function foo1() {
+//     // console.log('a1', a1); undefined por hoisting
+//     var a1 = 2;
+//     console.log('a1', a1); // imprime a1 = 2
+// }
+
+// function pro1() {
+//     foo1();
+// }
+// // console.log('a1', a1);
+// foo1();
 
 
 
@@ -418,4 +444,148 @@ foo1();
 
 
 // 16) Programa una función que devuelva el monto final después de aplicar un descuento a una cantidad dada, pe. miFuncion(1000, 20) devolverá 800.
+const descuento = (monto = undefined, descuento = 0) => {
+    if (Math.sign(monto) === -1) return console.warn('No existen montos negativos');
+    if (monto === 0) return console.warn('No existe descuento para un monto de 0');
+    if (monto === undefined) return console.warn('No ingresaste el monto');
+    if (typeof monto !== 'number') return console.warn(`El dato ${monto} ingresado como monto, debe ser de tipo number`);
+    if (Math.sign(descuento) === -1) return console.warn('No existen descuentos negativos');
+    if (typeof descuento !== 'number') return console.warn(`El dato ${descuento} ingersado como descuento, debe ser de tipo number`);
+
+    return console.info(`$${monto} - ${descuento}% = $${monto - ((monto*descuento)/100)}`);
+}
+
+// descuento();
+// descuento('200');
+// descuento(0);
+// descuento(-1000);
+// descuento(1000, '20');
+// descuento(1000, -20);
+// descuento(1000);
+// descuento(1000, 25);
+
 // 17) Programa una función que dada una fecha válida determine cuantos años han pasado hasta el día de hoy, pe. miFuncion(new Date(1984,4,23)) devolverá 35 años (en 2020).
+
+const calcAnios = (fecha = undefined) => {
+    if (fecha === undefined) return console.warn('No ingresaste la fecha');
+    if (!(fecha instanceof Date)) return console.warn('El valor que ingresaste no es una fecha válida');
+
+    let hoyMenosFecha = new Date().getTime() - fecha.getTime(),
+        aniosEnMS = 1000 * 60 * 60 * 24 * 365,
+        aniosHumanos = Math.floor(hoyMenosFecha / aniosEnMS);
+
+    return (Math.sign(aniosHumanos) === -1) ?
+        console.info(`Faltan ${Math.abs(aniosHumanos)} años para el ${fecha.getFullYear()}.`) :
+        (Math.sign(aniosHumanos) === 1) ?
+        console.info(`Han Pasado ${aniosHumanos} años, desde ${fecha.getFullYear()}.`) :
+        console.info(`Estamos en el año actual ${fecha.getFullYear()}`);
+}
+
+// calcAnios();
+// calcAnios({});
+// calcAnios(false);
+// calcAnios(new Date());
+// calcAnios(new Date(1991, 10, 23));
+// calcAnios(new Date(2091, 10, 23));
+
+
+// 18) Programa una función que dada una cadena de texto cuente el número de vocales y consonantes, pe. miFuncion("Hola Mundo") devuelva Vocales: 4, Consonantes: 5.
+const contarLetras = (cadena = '') => {
+    if (!cadena) return console.warn('No ingresaste una cadena de texto');
+    if (typeof cadena !== 'string') return console.warn(`El valor ${cadena} no es una cadena de texto`);
+
+    let vocales = 0,
+        consonantes = 0;
+
+    cadena = cadena.toLowerCase();
+
+    for (let letra of cadena) {
+        if (/[aeiouáéíóúü]/.test(letra)) vocales++;
+        if (/[bcdfghjklmnpqrstvwxyz]/.test(letra)) consonantes++;
+    }
+
+    // return console.info({
+    //     cadena: cadena,
+    //     vocales: vocales,
+    //     consonantes: consonantes
+    // }) por propiedades de los objetos literales
+
+    return console.info({
+        cadena,
+        vocales,
+        consonantes
+    })
+}
+
+// contarLetras();
+// contarLetras(3);
+// contarLetras('Hola Mundo');
+// contarLetras('Ñoño');
+
+
+
+// 19) Programa una función que valide que un texto sea un nombre válido, pe. miFuncion("Jonathan MirCha") devolverá verdadero.
+const validarNombre = (nombre = '') => {
+    if (!nombre) return console.warn('No ingresaste un nombre');
+    if (typeof nombre !== 'string') return console.warn(`El valor ${nombre} no es una cadena de texto`);
+
+    let expReg = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/g.test(nombre);
+
+    return (expReg) ?
+        console.info(`${nombre} es un nombre válido`) :
+        console.info(`${nombre} no es un nombre válido`);
+}
+
+// validarNombre();
+// validarNombre('6');
+// validarNombre('Víctor Peña');
+
+
+// 20) Programa una función que valide que un texto sea un email válido, pe. miFuncion("jonmircha@gmail.com") devolverá verdadero.
+const validarEmail = (email = '') => {
+    if (!email) return console.warn('No ingresaste un Email');
+    if (typeof email !== 'string') return console.warn(`El valor ${email} no es una cadena de texto`);
+
+    // La expresión regular que uso para el email en este video /[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})/i
+    let expReg = /[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})/i.test(email);
+
+    return (expReg) ?
+        console.info(`${email} es un email válido`) :
+        console.info(`${email} no es un email válido`);
+}
+
+// validarEmail();
+// validarEmail(34);
+// validarEmail('34');
+// validarEmail('VíctorPeña@gmail');
+// validarEmail('VíctorPeña@gmail.com');
+
+// fusion 19 y 20
+const validarPatron = (cadena = '', patron = undefined) => {
+    if (!cadena) return console.warn('No ingresaste una cadena de texto a evaluar');
+    if (typeof cadena !== 'string') return console.warn(`El valor ${cadena} no es una cadena de texto`);
+    if (patron === undefined) return console.warn('No ingresaste un patron de texto a evaluar');
+    if (!(patron instanceof RegExp)) return console.warn(`El valor ${patron} no es una RexExp`);
+
+
+
+    let expReg = patron.test(cadena);
+
+    return (expReg) ?
+        console.info(`${cadena} cumple con el patron ingresado`) :
+        console.warn(`${cadena} no cumple con el patron ingresado`);
+}
+
+// validarPatron();
+// validarPatron({});
+// validarPatron('Victor Peña', /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/g);
+// validarPatron('Victor Peña');
+
+// 21) Programa una función que dado un array numérico devuelve otro array con los números elevados al cuadrado, pe. mi_funcion([1, 4, 5]) devolverá [1, 16, 25].
+
+// 22) Programa una función que dado un array devuelva el número mas alto y el más bajo de dicho array, pe. miFuncion([1, 4, 5, 99, -60]) devolverá [99, -60].
+// 23) Programa una función que dado un array de números devuelva un objeto con 2 arreglos en el primero almacena los números pares y en el segundo los impares, pe. miFuncion([1,2,3,4,5,6,7,8,9,0]) devolverá {pares: [2,4,6,8,0], impares: [1,3,5,7,9]}.
+
+// 24) Programa una función que dado un arreglo de números devuelva un objeto con dos arreglos, el primero tendrá los numeros ordenados en forma ascendente y el segundo de forma descendiente, pe. miFuncion([7, 5,7,8,6]) devolverá { asc: [5,6,7,7,8], desc: [8,7,7,6,5] }.
+// 25) Programa una función que dado un arreglo de elementos, elimine los duplicados, pe. miFuncion(["x", 10, "x", 2, "10", 10, true, true]) devolverá ["x", 10, 2, "10", true].
+// 26) Programa una función que dado un arreglo de números obtenga el promedio, pe. promedio([9,8,7,6,5,4,3,2,1,0]) devolverá 4.5.
